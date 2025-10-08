@@ -1,0 +1,97 @@
+{
+  "andalucia": {
+    "name": "Andalucía",
+    "path": "#path9711",
+    "color": "#979797"
+  },
+ "aragon": {
+    "name": "Aragón",
+    "path": "#path9713",
+    "color": "#979797"
+  },
+ "asturias": {
+    "name": "Asturias",
+    "path": "#path9715",
+    "color": "#979797"
+  },
+  "baleares": {
+    "name": "Baleares",
+    "path": "#path9717",
+    "color": "#979797"
+  },
+  "canarias": {
+    "name": "Canarias",
+    "path": "#path9719",
+    "color": "#979797"
+  },
+  "cantabria": {
+    "name": "Cantabria",
+    "path": "#path9721",
+    "color": "#979797"
+  },
+  "castilla_la_mancha": {
+    "name": "Castilla-La Mancha",
+    "path": "#path9723",
+    "color": "#979797"
+  },
+  "castilla_leon": {
+    "name": "Castilla y León",
+    "path": "#path9725",
+    "color": "#979797"
+  },
+ "cataluna": {
+    "name": "Cataluña",
+    "path": "#path9727",
+    "color": "#979797"
+  },
+ "valencia": {
+    "name": "Comunidad Valenciana",
+    "path": "#path9729",
+    "color": "#979797"
+  },
+ "extremadura": {
+    "name": "Extremadura",
+    "path": "#path9731",
+    "color": "#979797"
+  },
+ "galicia": {
+    "name": "Galicia",
+    "path": "#path9733",
+    "color": "#979797"
+  },
+ "madrid": {
+    "name": "Madrid",
+    "path": "#path9735",
+    "color": "#979797"
+  },
+ "murcia": {
+    "name": "Murcia",
+    "path": "#path9737",
+    "color": "#979797"
+  },
+  "navarra": {
+    "name": "Navarra",
+    "path": "#path9739",
+    "color": "#979797"
+  },
+ "pais_vasco": {
+    "name": "País Vasco",
+    "path": "#path9741",
+    "color": "#979797"
+  },
+ "rioja": {
+    "name": "La Rioja",
+    "path": "#path9743",
+    "color": "#979797"
+  },
+  "ceuta": {
+    "name": "Ceuta",
+    "path": "#path9745",
+    "color": "#979797"
+  },
+ "melilla": {
+    "name": "Melilla",
+    "path": "#path9747",
+    "color": "#979797"
+  }
+}

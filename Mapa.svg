@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--********* Mapa de las 17 Comunidades Autónomas de España ************-->
+<svg baseprofile="tiny" fill="#6f9c76" height="890" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5" version="1.2" viewbox="0 0 1000 890" width="100" xmlns="http://www.w3.org/2000/svg">
+  <g id="features">
+    <!-- Andalucía -->
+    <path d="M480 320 L520 310 L560 320 L580 350 L570 380 L540 400 L500 410 L470 390 Z" id="ESAN" name="Andalucía"/>
+    
+    <!-- Aragón -->
+    <path d="M620 160 L660 150 L700 170 L690 200 L660 210 L630 200 L620 180 Z" id="ESAR" name="Aragón"/>
+    
+    <!-- Asturias -->
+    <path d="M500 60 L540 50 L570 70 L560 100 L530 110 L490 100 L480 80 Z" id="ESAS" name="Asturias"/>
+    
+    <!-- Cantabria -->
+    <path d="M580 70 L610 60 L630 80 L620 100 L600 110 L570 100 L580 80 Z" id="ESCB" name="Cantabria"/>
+    
+    <!-- Castilla y León -->
+    <path d="M520 100 L580 90 L610 110 L600 140 L570 150 L530 140 L510 130 Z" id="ESCL" name="Castilla y León"/>
+    
+    <!-- Castilla-La Mancha -->
+    <path d="M600 200 L650 190 L680 210 L670 240 L640 250 L610 240 L600 220 Z" id="ESCM" name="Castilla-La Mancha"/>
+    
+    <!-- Cataluña -->
+    <path d="M760 140 L800 130 L830 150 L820 180 L790 190 L760 180 L750 160 Z" id="ESCT" name="Cataluña"/>
+    
+    <!-- Extremadura -->
+    <path d="M460 260 L500 250 L530 270 L520 300 L490 310 L460 300 L450 280 Z" id="ESEX" name="Extremadura"/>
+    
+    <!-- Galicia -->
+    <path d="M400 60 L450 50 L480 80 L470 110 L440 120 L400 100 L380 90 Z" id="ESGA" name="Galicia"/>
+    
+    <!-- Islas Baleares -->
+    <path d="M820 260 L850 250 L870 270 L860 300 L840 310 L810 300 L820 280 Z" id="ESIB" name="Islas Baleares"/>
+    
+    <!-- Islas Canarias -->
+    <path d="M100 500 L140 490 L170 510 L160 540 L130 550 L100 540 L90 520 Z" id="ESCN" name="Islas Canarias"/>
+    
+    <!-- La Rioja -->
+    <path d="M640 130 L660 120 L680 130 L670 150 L650 160 L630 150 L640 140 Z" id="ESRI" name="La Rioja"/>
+    
+    <!-- Comunidad de Madrid -->
+    <path d="M590 180 L620 170 L640 190 L630 210 L610 220 L590 210 L580 190 Z" id="ESMD" name="Comunidad de Madrid"/>
+    
+    <!-- Región de Murcia -->
+    <path d="M660 280 L700 270 L720 290 L710 310 L680 320 L650 310 L660 290 Z" id="ESMC" name="Región de Murcia"/>
+    
+    <!-- Comunidad Foral de Navarra -->
+    <path d="M660 100 L690 90 L710 110 L700 130 L680 140 L660 130 L650 110 Z" id="ESNC" name="Comunidad Foral de Navarra"/>
+    
+    <!-- País Vasco -->
+    <path d="M620 80 L650 70 L670 90 L660 110 L640 120 L620 110 L610 90 Z" id="ESPV" name="País Vasco"/>
+    
+    <!-- Comunidad Valenciana -->
+    <path d="M700 220 L740 210 L770 230 L760 260 L730 270 L700 260 L690 240 Z" id="ESVC" name="Comunidad Valenciana"/>
+  </g>
+  
+  <g id="label_points">
+    <circle class="Andalucía" cx="520" cy="360" id="ESAN"/>
+    <circle class="Aragón" cx="650" cy="180" id="ESAR"/>
+    <circle class="Asturias" cx="530" cy="80" id="ESAS"/>
+    <circle class="Cantabria" cx="600" cy="90" id="ESCB"/>
+    <circle class="Castilla y León" cx="560" cy="120" id="ESCL"/>
+    <circle class="Castilla-La Mancha" cx="640" cy="220" id="ESCM"/>
+    <circle class="Cataluña" cx="780" cy="160" id="ESCT"/>
+    <circle class="Extremadura" cx="500" cy="280" id="ESEX"/>
+    <circle class="Galicia" cx="440" cy="90" id="ESGA"/>
+    <circle class="Islas Baleares" cx="840" cy="280" id="ESIB"/>
+    <circle class="Islas Canarias" cx="130" cy="520" id="ESCN"/>
+    <circle class="La Rioja" cx="660" cy="140" id="ESRI"/>
+    <circle class="Comunidad de Madrid" cx="610" cy="20" id="ESMD"/>
+    <circle class="Región de Murcia" cx="680" cy="300" id="ESMC"/>
+    <circle class="Comunidad Foral de Navarra" cx="680" cy="110" id="ESNC"/>
+    <circle class="País Vasco" cx="640" cy="100" id="ESPV"/>
+    <circle class="Comunidad Valenciana" cx="730" cy="240" id="ESVC"/>
+  </g>
+</svg>
