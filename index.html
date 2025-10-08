@@ -39,7 +39,7 @@
         h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0.3);
         }
 
         .subtitle {
@@ -60,7 +60,7 @@
             background: #f8f9fa;
             border-radius: 15px;
             padding: 15px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: inset 0 10px rgba(0,0,0,0.1);
         }
 
         .controls {
@@ -177,12 +177,14 @@
         path:hover {
             stroke: #333;
             stroke-width: 2;
+            filter: brightness(1.1) saturate(1.2);
         }
 
         .highlighted {
-            filter: brightness(1.2) saturate(1.5);
+            filter: brightness(1.2) saturate(1.5) drop-shadow(0 0 8px rgba(255, 107, 107, 0.7));
             stroke: #ff6b6b !important;
             stroke-width: 3 !important;
+            transition: all 0.3s ease, filter 0.2s ease;
         }
 
         .timer {
@@ -194,6 +196,26 @@
             background: #fff5f5;
             border-radius: 8px;
             margin: 10px 0;
+        }
+        
+        .pulse {
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            10% { transform: scale(1); }
+        }
+        
+        .bounce {
+            animation: bounce 0.6s ease;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
         }
 
         @media (max-width: 768px) {
@@ -208,6 +230,75 @@
             h1 {
                 font-size: 2em;
             }
+            
+            .mode-selector {
+                flex-direction: column;
+            }
+            
+            .mode-btn {
+                margin-bottom: 5px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                margin: 5px;
+                border-radius: 10px;
+            }
+            
+            header {
+                padding: 15px 10px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1em;
+            }
+            
+            .controls {
+                padding: 15px;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .stat-box {
+                width: 100%;
+            }
+        }
+        
+        /* Asegurar que el SVG sea accesible */
+        svg[focusable="true"] {
+            outline: none;
+        }
+        
+        /* Estilos para usuarios con problemas de visión */
+        .high-contrast {
+            filter: contrast(1.5) brightness(1.2);
+        }
+        
+        /* Indicador de foco para teclado */
+        *:focus {
+            outline: 2px solid #4ecdc4;
+            outline-offset: 2px;
+        }
+        
+        /* Ocultar elementos para lectores de pantalla */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
     </style>
 </head>
@@ -293,7 +384,7 @@
             "baleares": {
                 "name": "Baleares",
                 "path": "#path9717",
-                "color": "#979797"
+                "color": "#9797"
             },
             "canarias": {
                 "name": "Canarias",
@@ -372,6 +463,17 @@
             }
         };
 
+        // Variables para el modo desafío
+        let score = 0;
+        let total = 0;
+        let timerStarted = false;
+        let seconds = 0;
+        let timerInterval;
+        let currentChallengeRegion = null;
+        let gameMode = 'free'; // 'free' o 'challenge'
+        let regionsLeft = []; // Regiones por adivinar en modo desafío
+        let currentTargetRegion = null; // Región actual a adivinar en modo desafío
+        
         // Inicializar la aplicación
         function initializeMap() {
             const selector = document.getElementById('region-selector');
@@ -399,6 +501,17 @@
                         selector.value = key;
                         playSound('select');
                         announceSelection(comunidades[key].name);
+                        
+                        // Verificar si es el modo desafío para contar aciertos
+                        if (gameMode === 'challenge') {
+                            checkChallengeMode(key);
+                        }
+                        
+                        // Añadir efecto de rebote al elemento seleccionado
+                        path.classList.add('bounce');
+                        setTimeout(() => {
+                            path.classList.remove('bounce');
+                        }, 600);
                     });
                     
                     // Añadir soporte para teclado
@@ -409,6 +522,17 @@
                             selector.value = key;
                             playSound('select');
                             announceSelection(comunidades[key].name);
+                            
+                            // Verificar si es el modo desafío para contar aciertos
+                            if (gameMode === 'challenge') {
+                                checkChallengeMode(key);
+                            }
+                            
+                            // Añadir efecto de rebote al elemento seleccionado
+                            path.classList.add('bounce');
+                            setTimeout(() => {
+                                path.classList.remove('bounce');
+                            }, 600);
                         }
                     });
                 }
@@ -420,6 +544,20 @@
                     highlightRegion(e.target.value);
                     playSound('select');
                     announceSelection(comunidades[e.target.value].name);
+                    
+                    // Verificar si es el modo desafío para contar aciertos
+                    if (gameMode === 'challenge') {
+                        checkChallengeMode(e.target.value);
+                    }
+                    
+                    // Añadir efecto de pulso al elemento correspondiente en el mapa
+                    const path = svgContainer.querySelector(comunidades[e.target.value].path);
+                    if (path) {
+                        path.classList.add('pulse');
+                        setTimeout(() => {
+                            path.classList.remove('pulse');
+                        }, 500);
+                    }
                 }
             });
             
@@ -432,9 +570,80 @@
                 btn.addEventListener('click', (e) => {
                     document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
                     e.target.classList.add('active');
-                    setGameMode(e.target.dataset.mode);
+                    gameMode = e.target.dataset.mode;
+                    setGameMode(gameMode);
+                    
+                    // Iniciar temporizador si es modo desafío
+                    if (gameMode === 'challenge' && !timerStarted) {
+                        startTimer();
+                        startChallengeMode();
+                    }
                 });
             });
+        }
+        
+        function startChallengeMode() {
+            // Inicializar el modo desafío
+            regionsLeft = Object.keys(comunidades);
+            total = 0;
+            score = 0;
+            document.getElementById('total').textContent = total;
+            document.getElementById('score').textContent = score;
+            getNextChallengeRegion();
+        }
+        
+        function getNextChallengeRegion() {
+            if (regionsLeft.length > 0) {
+                // Seleccionar una región aleatoria de las que quedan
+                const randomIndex = Math.floor(Math.random() * regionsLeft.length);
+                currentTargetRegion = regionsLeft[randomIndex];
+                
+                // Opcional: Mostrar una pista o indicar qué región buscar
+                console.log(`Encuentra: ${comunidades[currentTargetRegion].name}`);
+            } else {
+                // Juego completado
+                endChallengeMode();
+            }
+        }
+        
+        function checkChallengeMode(selectedRegion) {
+            // En el modo desafío, cada selección cuenta como intento
+            total++;
+            document.getElementById('total').textContent = total;
+            
+            // Verificar si la selección coincide con la región objetivo
+            if (selectedRegion === currentTargetRegion) {
+                // Acierto
+                score++;
+                document.getElementById('score').textContent = score;
+                
+                // Remover la región acertada de la lista
+                regionsLeft = regionsLeft.filter(region => region !== currentTargetRegion);
+                
+                // Destacar visualmente la región acertada
+                const svgContainer = document.querySelector('.svg-container');
+                const path = svgContainer.querySelector(comunidades[currentTargetRegion].path);
+                if (path) {
+                    path.classList.add('highlighted');
+                }
+                
+                // Reproducir sonido de acierto
+                playSound('success');
+                
+                // Obtener la siguiente región a adivinar
+                setTimeout(getNextChallengeRegion, 1000);
+            } else {
+                // Reproducir sonido de error
+                playSound('error');
+            }
+            // Si no es acierto, simplemente continuar con la misma región objetivo
+        }
+        
+        function endChallengeMode() {
+            // Finalizar el modo desafío
+            clearInterval(timerInterval);
+            playSound('completion');
+            alert(`¡Juego completado! Aciertos: ${score} de ${total} intentos. Tiempo: ${seconds} segundos.`);
         }
         
         function announceSelection(regionName) {
@@ -446,7 +655,7 @@
             announcement.textContent = `Seleccionado: ${regionName}`;
             document.body.appendChild(announcement);
             
-            // Eliminar el elemento después de un tiempo
+            // Eliminar elemento después de un tiempo
             setTimeout(() => {
                 document.body.removeChild(announcement);
             }, 1000);
@@ -468,9 +677,50 @@
         }
         
         function playSound(type) {
-            // En una implementación completa, aquí se reproducirían sonidos
-            // Por ahora, solo se simula con un console.log
-            console.log(`Sonido reproducido: ${type}`);
+            // Crear contexto de audio si no existe
+            if (!window.audioContext) {
+                window.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            // Función para crear sonidos simples con Web Audio API
+            function playTone(frequency, duration, type = 'sine') {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.type = type;
+                oscillator.frequency.value = frequency;
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + duration);
+            }
+            
+            // Reproducir sonidos según el tipo
+            switch(type) {
+                case 'select':
+                    playTone(523.25, 0.1, 'sine'); // Nota DO
+                    break;
+                case 'success':
+                    playTone(659.25, 0.2, 'sine'); // Nota MI
+                    playTone(783.99, 0.2, 'sine'); // Nota SOL
+                    setTimeout(() => playTone(1046.50, 0.3, 'sine'), 100); // Nota DO2
+                    break;
+                case 'error':
+                    playTone(220, 0.3, 'sine'); // Nota LA
+                    setTimeout(() => playTone(174.61, 0.3, 'sine'), 100); // Nota FA#
+                    break;
+                case 'completion':
+                    playTone(523.25, 0.15, 'sine');
+                    setTimeout(() => playTone(659.25, 0.15, 'sine'), 150);
+                    setTimeout(() => playTone(783.99, 0.15, 'sine'), 300);
+                    setTimeout(() => playTone(1046.50, 0.4, 'sine'), 450);
+                    break;
+            }
         }
         
         function resetGame() {
@@ -482,6 +732,15 @@
             document.getElementById('score').textContent = '0';
             document.getElementById('total').textContent = '0';
             resetTimer();
+            score = 0;
+            total = 0;
+            gameMode = 'free';
+            regionsLeft = [];
+            currentTargetRegion = null;
+            
+            // Resetear botones de modo
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('.mode-btn[data-mode="free"]').classList.add('active');
         }
         
         function showHint() {
@@ -496,7 +755,7 @@
                     path.classList.remove('highlighted');
                 });
                 document.getElementById('region-selector').value = '';
-            }, 2000);
+            }, 200);
         }
         
         function setGameMode(mode) {
@@ -506,7 +765,23 @@
         
         function resetTimer() {
             // Reiniciar el temporizador
+            clearInterval(timerInterval);
+            seconds = 0;
+            timerStarted = false;
             document.getElementById('timer').textContent = 'Tiempo: 00:00';
+        }
+        
+        function startTimer() {
+            if (!timerStarted) {
+                timerStarted = true;
+                timerInterval = setInterval(() => {
+                    seconds++;
+                    const minutes = Math.floor(seconds / 60);
+                    const remainingSeconds = seconds % 60;
+                    document.getElementById('timer').textContent = 
+                        `Tiempo: ${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+                }, 1000);
+            }
         }
     </script>
 </body>
