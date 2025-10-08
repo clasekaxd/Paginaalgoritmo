@@ -239,7 +239,6 @@
                         <button class="mode-btn active" data-mode="free">Juego Libre</button>
                         <button class="mode-btn" data-mode="challenge">Modo Desafío</button>
                     </div>
-                </div>
                 
                 <div class="control-group">
                     <button id="reset-btn">🔄 Reiniciar Juego</button>
@@ -390,10 +389,27 @@
             Object.keys(comunidades).forEach(key => {
                 const path = svgContainer.querySelector(comunidades[key].path);
                 if (path) {
+                    // Añadir atributos ARIA para accesibilidad
+                    path.setAttribute('role', 'option');
+                    path.setAttribute('aria-label', comunidades[key].name);
+                    path.setAttribute('tabindex', '0');
+                    
                     path.addEventListener('click', () => {
                         highlightRegion(key);
                         selector.value = key;
                         playSound('select');
+                        announceSelection(comunidades[key].name);
+                    });
+                    
+                    // Añadir soporte para teclado
+                    path.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            highlightRegion(key);
+                            selector.value = key;
+                            playSound('select');
+                            announceSelection(comunidades[key].name);
+                        }
                     });
                 }
             });
@@ -403,6 +419,7 @@
                 if (e.target.value) {
                     highlightRegion(e.target.value);
                     playSound('select');
+                    announceSelection(comunidades[e.target.value].name);
                 }
             });
             
@@ -418,6 +435,21 @@
                     setGameMode(e.target.dataset.mode);
                 });
             });
+        }
+        
+        function announceSelection(regionName) {
+            // Crear un elemento temporal para lectores de pantalla
+            const announcement = document.createElement('div');
+            announcement.setAttribute('aria-live', 'polite');
+            announcement.setAttribute('aria-atomic', 'true');
+            announcement.className = 'sr-only';
+            announcement.textContent = `Seleccionado: ${regionName}`;
+            document.body.appendChild(announcement);
+            
+            // Eliminar el elemento después de un tiempo
+            setTimeout(() => {
+                document.body.removeChild(announcement);
+            }, 1000);
         }
         
         function highlightRegion(regionKey) {
